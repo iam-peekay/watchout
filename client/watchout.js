@@ -26,7 +26,8 @@ var Enemy = function(id, x, y, r) {
 };
 
 // instantiate player class
-var Player = function(x, y, r) {
+var Player = function(id, x, y, r) {
+  this.id = id;
   this.x = x;
   this.y = y;
   this.r = r;
@@ -42,8 +43,13 @@ var enemiesArray = d3.range(25).map(function(d) {
   return new Enemy(Math.floor(Math.random() * 100), Math.random() * w, Math.random() * h, 15);
 });
 
+// create a player
+var player = d3.range(1).map(function(d) {
+  return new Player('player1', w / 2, h / 2, 20);
+});
+
 // set enemy attributes
-svg.selectAll('circle').data(enemiesArray, function(d) { return d.id; })
+var enemies = svg.selectAll('.enemy').data(enemiesArray, function(d) { return d.id; })
    .enter()
    .append('circle')
    .attr('cx', function(d){ return d.x; })
@@ -51,3 +57,38 @@ svg.selectAll('circle').data(enemiesArray, function(d) { return d.id; })
    .attr('r', function(d) { return d.r + 'px'; })
    .style('fill', 'grey')
    .classed('enemy', true);
+
+// set player attributes
+var player = svg.selectAll('.player').data(player, function(d) { return d.id; })
+   .enter()
+   .append('circle')
+   .attr('cx', function(d){ return d.x; })
+   .attr('cy', function(d) { return d.y; })
+   .attr('r', function(d) { return d.r + 'px'; })
+   .style('fill', 'red')
+   .classed('player', true);
+
+setInterval(function() {
+
+  enemies.transition().duration(1200)
+  .attr('cx', function(d){
+    d.x = Math.random() * w;
+    return d.x;
+  })
+  .attr('cy', function(d){
+    d.y = Math.random() * h;
+    return d.y;
+  })
+
+},1000)
+
+
+
+
+
+
+
+
+
+
+

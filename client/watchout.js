@@ -68,9 +68,23 @@ var player = svg.selectAll('.player').data(player, function(d) { return d.id; })
    .style('fill', 'red')
    .classed('player', true);
 
+var drag = d3.behavior.drag();
+  drag.on("drag", function(d){
+  d.x += d3.event.dx;
+  d.y += d3.event.dy;
+  d3.select(this).attr('cx', function(d){ return d.x; })
+        .attr('cy', function(d) { return d.y; })
+});
+
+player.call(drag);
+
+
+
+
 setInterval(function() {
 
   enemies.transition().duration(1200)
+  .ease('back')
   .attr('cx', function(d){
     d.x = Math.random() * w;
     return d.x;
@@ -80,7 +94,7 @@ setInterval(function() {
     return d.y;
   })
 
-},1000)
+},1200)
 
 
 

@@ -13,7 +13,7 @@
 var w = window.innerWidth - 320;
 var h = window.innerHeight - 160;
 var svg = d3.select('.board').append('svg');
-
+var collisions = 0;
 svg.attr({height: h, width: w});
 
 // instantiate enemy class
@@ -22,6 +22,7 @@ var Enemy = function(id, x, y, r) {
   this.x = x;
   this.y = y;
   this.r = r;
+  this.isColliding = false ;
 };
 
 Enemy.prototype.checkBounds = function(){
@@ -53,8 +54,11 @@ Player.prototype.detectCollision = function() {
     var yDiff = enemy.y - that.y;
     var radiusSum = that.r + enemy.r;
     var sqrRoot = Math.sqrt(xDiff * xDiff + yDiff * yDiff);
-    if(sqrRoot < radiusSum){
+    if(sqrRoot < radiusSum && !enemy.isColliding){
+      enemy.isColliding = true;
       collisionExists = true;
+    } else if (sqrRoot >= radiusSum && enemy.isColliding){
+      enemy.isColliding =false;
     }
   });
     return collisionExists;
@@ -100,7 +104,7 @@ var svgPlayer = svg.selectAll('.player').data(player, function(d) { return d.id;
    .attr('cx', function(d){ return d.x; })
    .attr('cy', function(d) { return d.y; })
    .attr('r', function(d) { return d.r + 'px'; })
-   .style('fill', 'green')
+   .style('fill', '#EF233C')
    .classed('player', true);
 
 var drag = d3.behavior.drag();
@@ -139,10 +143,11 @@ setInterval(function() {
 setInterval(function(){
   player[0].score += 1;
   if(player[0].detectCollision()){
+    collisions++;
     player[0].score = 0;
   }
   d3.select('.current').text("Current score: " + player[0].score);
-  
+  d3.select('.collides').text("Current collisions: " + collisions );
   if(player[0].score > player[0].highscore){
     player[0].highscore = player[0].score;
     d3.select('.highscore').text("High score: " + player[0].highscore);

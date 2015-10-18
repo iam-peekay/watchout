@@ -6,12 +6,20 @@
   <body>
     <div class="scoreboard">
       <!-- Modify the scoreboard when important events occur in your game! -->
+      <span>PLAYER 2</span>
       <div class="highscore">High score: </div>
       <div class="current">Current score: </div>
-      <div class="collides">Current collisions: </div>
+      <br></br>
+      <span> PLAYER 1 </span>
+      <div class="highscore2">High score: </div>
+      <div class="current2">Current score: </div>
     </div>
     <div class="board"><div class="mouse"></div></div>
     <script src="lib/d3.js" charset="utf-8"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src='watchout.js'></script>
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
   </body>
 </html>
+
